@@ -1,4 +1,4 @@
-version: "3.2"
+version: "3.8"
 services:
   rabbitmq:
     container_name: rabbitmq
@@ -9,9 +9,39 @@ services:
     volumes:
         - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
         - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 15s
+      retries: 1
     networks:
         - lab_network
+  consumer_node01:
+    container_name: consumer_node01
+    build: rabbitmq-consumer
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    networks:
+        - lab_network
+  consumer_node02:
+    container_name: consumer_node02
+    build: rabbitmq-consumer
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    networks:
+        - lab_network
+  consumer_node03:
+    container_name: consumer_node03
+    build: rabbitmq-consumer
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    networks:
+        - lab_network 
 
 networks:
-  lab_network:
-    driver: bridge
+  # Declare our private network.  We must declare one for the magic
+  # Docker DNS to work, but otherwise its default settings are fine.
+  lab_network: {}

@@ -11,7 +11,7 @@ def callback(ch, method, properties, body):
     print(html.title)
 
 def main():
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    connection = pika.BlockingConnection(pika.URLParameters("amqp://guest:guest@rabbitmq/"))
     channel = connection.channel()
     channel.queue_declare(queue='lab_queue')
 

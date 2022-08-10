@@ -9,7 +9,7 @@ def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
     channel.queue_declare(queue='lab_queue')
-    urls = ['http://google.com','http://facebook.com','http://ivanshires.info']
+    urls = ['http://google.com','http://facebook.com']
     for website in urls:
         channel.basic_publish(exchange='',
                     routing_key='lab_queue',
